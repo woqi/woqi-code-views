@@ -1,42 +1,47 @@
 import App, { Container } from 'next/app'
-
-import Link from 'next/router'
 import { Fragment } from 'react';
+import { Provider } from "react-redux";
 
+
+import withRedux from '../lib/with-redux';
 import Layout from "../components/Layout";
 
-import { myContext } from '../lib/my-context';
 
 class MyApp extends App {
-  // static async getInitialProps({ Component }) {
 
-  //   let pageProps
-  //   if (Component.getInitialProps) {
-  //     pageProps = await Component.getInitialProps()
-  //   }
-  //   return { pageProps }
-  // }
+  static async getInitialProps(ctx) {
+    const { Component } = ctx
+    let pageProps = {}
+    if (Component.getInitialProps) {
+      pageProps = await Component.getInitialProps(ctx)
+    }
+    return { pageProps }
+  }
 
   render() {
-    // const { Component, pageProps } = this.props
-    const { Component } = this.props
+    const { Component, pageProps, reduxStore } = this.props
     return (
-      <Fragment>
-        <Container>
+      <Container>
+
+        <Provider store={reduxStore}>
+
           <Layout>
-
-            <myContext.Provider value="test">
-              {/* <Component {...pageProps} /> */}
-              <Component />
-
-
-            </myContext.Provider>
-
+            <Component {...pageProps} />
           </Layout>
-        </Container>
-      </Fragment>
+
+        </Provider>
+
+
+        {/* @import'../static/a.css'; */}
+        {/* @import'antd/dist/antd.css'; */}
+        {/* // @import'../static/antd.css'; */}
+        <style jsx >{`
+          @import'../static/antd.css'; 
+      `}</style>
+      </Container>
+
 
     )
   }
 }
-export default MyApp
+export default withRedux(MyApp)

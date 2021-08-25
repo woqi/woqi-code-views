@@ -8,19 +8,24 @@ import {
 function c1Reducer(state, action) {
   switch (action.type) {
     case 'add':
-      return state + 1
+      return {count: state.count + 1}
     case 'minus':
       return state - 1
     case 'test':
       return state = 'chishi'
+    case 'closure':
+      return state.count
     default: return state
   }
 }
 
 function d() {
   const [state, setState] = useState(1);
+
   const [count, dispatchc1] = useReducer(c1Reducer, 0)
+
   const [t, dispatchT] = useReducer(c1Reducer, '初始')
+
   const [name, setName] = useState('请输入姓名')
 
   const config = useMemo(() => (
@@ -29,10 +34,16 @@ function d() {
       color: count > 3 ? 'red' : 'blue'
     }
   ), [count])
-  
+
   //以下用法相同
-  const handleButtonClick = useMemo(() => () => dispatchc1({ type: 'add' }), [])
+  const handleButtonClick = useMemo(() => () => {
+    return dispatchc1({ type: 'add' })
+  }, [])
   const handleButtonClick1 = useCallback(() => dispatchc1({ type: 'add' }), [])
+
+  const closure = () => {
+    setTimeout(() => { console.log('count---', count) }, 3000)
+  }
 
   return (
     <>
@@ -40,21 +51,35 @@ function d() {
       <br />
       <input value={name} onChange={(e) => setName(e.target.value)}></input>
       <br />
-      <Con config={config}
+      <br />
+
+      {/* <Con config={config}
         onButtonClick={handleButtonClick1}
-      />
+      /> */}
+
       <Child config={config}
         onButtonClick={handleButtonClick}
       />
       <br />
-      <div onClick={() => dispatchT({ type: 'test' })}>断保护----{t}</div>
+      <br />
+      <button onClick={closure}>闭包测试</button>
+
       <br />
       <button onClick={() => {
         setState(x => x + x);
       }}>测试useCallback</button>
+
+
+      <br />
+      <br />
       <div>state:{state}</div>
       <FunctionProfilePage user={state} />
       <ClassProfilePage user={state} />
+
+      <br />
+      <div onClick={() => dispatchT({ type: 'test' })}>断保护----{t}</div>
+      <br />
+
 
     </>
   )

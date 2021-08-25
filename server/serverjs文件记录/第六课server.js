@@ -32,6 +32,38 @@ app.prepare().then(() => {
   server.use(session(SESSION_CONFIG, server))
   auth(server)//处理github oAuth登陆
 
+  //以下配置会造成报错
+  // server.use((ctx, next) => {
+  //   if (ctx.cookies.get('wid')) {
+  //     ctx.session = {}
+  //   }
+  //   await next()
+  //   //通过ctx.cookies.set设置cookie
+  //   //已经发送了请求，再去设置cookie已经没有用了
+  // })
+
+  server.use(async (ctx, next) => {
+    //   ctx.respond = false
+    //   // console.log('cookies---------', ctx.cookies.get('wq'))
+    //   // //获取用户数据
+    //   // //比如调用`model.getUserById(id)`
+    // ctx.session = ctx.session || {}
+    //   // ctx.session.user = {
+    //   //   name: 'woqi', age: '18'
+    //   // }
+
+    //   if (!ctx.session.user) {
+    //     ctx.session.user = { name: 'woqi', age: '18' }
+    //   } else {
+    // console.log('session is------', ctx.session)
+    //   }
+
+
+    await next()
+  })
+
+
+
   router.get('/a/:id', async (ctx, next) => {
     const id = ctx.params.id
     await handle(ctx.req, ctx.res, {
@@ -43,20 +75,19 @@ app.prepare().then(() => {
 
   })
 
-  router.get('/api/user/info', async (ctx, next) => {
-    const user = ctx.session.userInfo
-    if (!user) {
-      ctx.status = 401
-      ctx.body = 'Need Login'
-    } else {
-
-      console.log('session!!!!!!!!!!!!!!!!!!!!!!!!!------------', ctx.session)
-      ctx.body = ctx.session.userInfo
-      ctx.set('Content-Type', 'application/json')//set是专门设置header的
+  router.get('/set/user', async (ctx, next) => {
+    // ctx.respond = false
+    ctx.session.user = {
+      name: 'woqi', age: '18'
     }
-
+    //此处不处理handle
+    ctx.body = 'set session success'
   })
 
+  router.get('/delete/session', async (ctx, next) => {
+    ctx.session = null
+    ctx.body = 'set session success~~'
+  })
 
 
 
@@ -68,7 +99,7 @@ app.prepare().then(() => {
       httpOnly: false
     })
 
-    ctx.req.session = ctx.session
+
     await handle(ctx.req, ctx.res)//handle处理所有res
     ctx.respond = false
   })
@@ -85,7 +116,7 @@ app.prepare().then(() => {
 
 
   server.listen(3030, () => {
-    console.log('成功')
+    console.log('成功') 
   })
 
 })

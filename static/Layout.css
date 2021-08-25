@@ -1,0 +1,27 @@
+.btn {
+  color: red;
+}
+
+.header-inner,
+.header-left {
+  display: flex;
+}
+
+.header-inner {
+  justify-content: space-between;
+
+}
+
+.header-left {
+  justify-content: flex-start;
+
+}
+
+
+.github-icon {
+  color: white;
+}
+
+.footer {
+  text-align: center;
+}

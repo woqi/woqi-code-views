@@ -3,8 +3,14 @@
 //   require.extensions['css'] = file => { }
 // }
 // modeule.exports = withCss({})
+
+const config = require('./config')
+
+
 module.exports = {
-  env: {
-    customKey: 'my-value',
+  publicRuntimeConfig: {
+    // staticFolder: '/static',
+    GITHUB_OAUTH_URL: config.GITHUB_OAUTH_URL,
+    OAUTH_URL: config.OAUTH_URL
   },
 }

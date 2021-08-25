@@ -13,8 +13,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@zeit/next-bundle-analyzer": "^0.1.2",
-    "@zeit/next-css": "^1.0.1",
     "antd": "^3.15.2",
     "atob": "^2.1.2",
     "axios": "^0.18.0",

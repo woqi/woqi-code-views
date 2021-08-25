@@ -46,7 +46,7 @@ A.getInitialProps = async () => {
         name: 'promise256',
         time: moment.default(Date.now() - 60 * 1000).fromNow()//一分钟前的
       })
-    }, 1000);
+    });
   })
   return await promise //return的东西都会被传入A的props
 }

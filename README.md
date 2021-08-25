@@ -42,7 +42,7 @@ getStaticProps 可以查数据库
 ```
 const A = () => {
   return (
-    <Fragment>
+    <Fragment> 
       页面aaa
       <div className="name">//////4444</div>
       <style jsx>{`
@@ -63,14 +63,86 @@ style jsx 这种 css 是 next.js 默认集成的 css-in-js 方案，自动做好
 
 next 可以异步加载模块和组件，这是两种状态
 
-在 8.0 这个版本，重构尽量把请求放在 getInitialProps 中,next会更好的处理数据同步的问题
-
+在 8.0 这个版本，重构尽量把请求放在 getInitialProps 中,next 会更好的处理数据同步的问题
 
 useLayoutEffect 和 useEffect 区别
 
-useLayoutEffect 的更新是在真实dom更新之前执行，里面放入需要大量时间的代码，导致页面卡顿
-useEffect 的更新是在真实dom更新之后执行
+useLayoutEffect 的更新是在真实 dom 更新之前执行，里面放入需要大量时间的代码，导致页面卡顿
+useEffect 的更新是在真实 dom 更新之后执行
 
-memo只检查props变更，其余的不检查
+memo 只检查 props 变更，其余的不检查
 
-useCallback
+由于 class 组件有 this 可以规避掉很多闭包问题
+function 组件(例子在 e.js 文件)很多时候只能拿到快照
+解决闭包目前有两种思路
+useRef 、useReduce
+
+```
+function reducer(state = initState, action) {
+  console.log('state---action', state, action)
+  switch (action.type) {
+    case ADD:
+      return { count: state.count + 1 }//return 的一定是一个新对象 prevState != newState //true
+      state.count +=1
+      return state//prevState != newState //false，推荐这种用法
+    default:
+      return state
+  }
+}
+
+```
+
+hoc 接收组件作为参数并返回新的组件
+
+OAuth 认证授权介绍
+是一种行业标准授权的方式
+
+客户端和服务端可以合并成为被授权方
+
+对密码存储加密，在数据库中
+常见为 https 加密，密钥服务器方才有
+
+OAuth 接入后会从微信这种拿到一个 token 会有头像用户名等信息
+授权不一定要先认证
+
+多重授权方式：
+Authorization Code：多用于浏览器 //常用
+Refresh Token：通过 Authorization Code 拿到的 token 去换取一个新的 token，原因是之前给的 token 要过期了，相当于一个延期。
+Device Code：主要针对于 tv
+PassWord:被授权方获取授权方的用户名及密码，多用于内网
+Implicit：被淘汰
+Client Creadentials:客户端使用
+
+Authorization Code 流程：
+客户端在网页上发起 redirect 携带 client_id(github 使用第三方登陆)
+认证成功后 github 给一个 redirect url，url 中 code，传递给服务器，
+服务器 使用 code + secret 给 github 发请求，获取 token，将两者（服务器&github）交互
+
+token：会携带一些权限信息
+client_id：让用户知道现在是给哪一个客户端授权
+
+[github OAuth 设置网址](https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-apphttps://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app)
+
+http://localhost:3030/auth?code=bfffa23c01ca2015c3f4
+
+[github api doc](https://docs.github.com/en/rest/reference/users)
+
+access_token=ghu_uDNaNKybHBt4p3iADPgTbwnssHbwCj348W1C&expires_in=28800&refresh_token=ghr_yhsw9sg6LtTO8x4GGBNcLgXv5UI59quSC43DhJ38hzCGbRnitlvsrIkx7eIzSM0ATL4NgO0jOFER&refresh_token_expires_in=15897600&scope=&token_type=bearer
+
+{
+"client_id":"Iv1.7bce592037053839",
+"client_secret":"bc8ddb7e43dbe07b2473fb6074433b3b2cfe29ff",
+"code":"476f9e6dede984558134"
+}
+
+https://github.com/login/oauth/authorize?client_id=Iv1.7bce592037053839&&scope=repo
+
+
+oauth 通过一次性 code、id+secret(在服务器上)、redirect_url 保证安全
+
+cookie储存在客户端，每次发请求都会携带
+
+| 日期 | 投入   | osk | fs     | tp 显示资产 |
+| ---- | ------ | --- | ------ | ----------- |
+| 8.9  | 300 ￥ | 23$ | 78$    | 45.72$      |
+| 8.12 | 400 ￥ | 25$ | 90.14$ | 107.18$     |
