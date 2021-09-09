@@ -6,6 +6,7 @@ const { client_id, client_secret, request_token_url } = config.github
 
 module.exports = (server) => {
   server.use(async (ctx, next) => {
+    // console.log('ctx.path---',ctx.path)
     if (ctx.path === "/auth") {
       const code = ctx.query.code
       if (!code) {
@@ -23,7 +24,7 @@ module.exports = (server) => {
           Accept: 'application/json'
         }
       })
-      // console.log('auth-----', res.status, res.data)
+      console.log('githubAuth-----', res.data)
 
       // auth----- 200 {
       //   access_token: 'ghu_1URUimtS0wXZuxye9viD4HWcpCJDg21gxDDv',
@@ -46,7 +47,7 @@ module.exports = (server) => {
             'Authorization': `${token_type} ${access_token}`
           }
         })
-        // console.log('userInfoResP-----------', userInfoResP.data)
+        console.log('userInfoResP-----------', userInfoResP.data)
         ctx.session.userInfo = userInfoResP.data
 
         ctx.redirect((ctx.session && ctx.session.urlBeforeOAuth) || '/')
@@ -81,7 +82,6 @@ module.exports = (server) => {
       const { url } = ctx.query
       ctx.session.urlBeforeOAuth = url
       ctx.redirect(config.OAUTH_URL)
-
     } else {
       await next()
     }

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState } from "react"
 import {
   Button,
   Layout,
@@ -8,26 +8,26 @@ import {
   Tooltip,
   Dropdown,
   Menu,
-} from "antd";
-import getConfig from "next/config";
-import { connect } from "react-redux";
-import axios from "axios";
-import { withRouter } from "next/router";
+} from "antd"
+import getConfig from "next/config"
+import { connect } from "react-redux"
+import axios from "axios"
+import { withRouter } from "next/router"
+import Link from 'next/link'
 
-import Container from "./Container";
-import { logOut } from "../store/store";
+import Container from "./Container"
+import { logOut } from "../store/store"
 
-const { publicRuntimeConfig } = getConfig();
-const { Header, Content, Footer } = Layout;
+const { publicRuntimeConfig } = getConfig()
+const { Header, Content, Footer } = Layout
 
 function LayoutCon({ children, user, logOut, router }) {
-  console.log("arg---", arguments);
-
-  const [search, setSearch] = useState("");
+  const urlQuery = router.query && router.query.query
+  const [search, setSearch] = useState(urlQuery || '')
 
   const handleSearchChange = useCallback((e) => {
-    setSearch(e.target.value);
-  }, []);
+    setSearch(e.target.value)
+  }, [])
   // onSearch敲回车
   const github_icon_style = {
     color: "white",
@@ -35,36 +35,39 @@ function LayoutCon({ children, user, logOut, router }) {
     display: "block",
     paddingTop: 10,
     marginRight: 20,
-  };
-  const handleOnSearch = useCallback((e) => {}, []);
+  }
+  const handleOnSearch = useCallback((e) => {
+    router.push(`/search?query=${search}`)
+  }, [search])
   const handleLogout = useCallback(() => {
-    logOut();
-  }, [logOut]);
+    logOut()
+  }, [logOut])
 
   const handleGoOAuth = useCallback((e) => {
-    e.preventDefault();
-    axios.get(`/prepare-auth?url=${router.asPath}`).then((res) => {
-      if (res.status === 200) {
-        location.href = publicRuntimeConfig.OAUTH_URL
-      } else {
-        console.log("prepare auth failed", res)
-      }
-    })
-    .catch(err=>{
-      console.log("prepare auth failed", err)
-
-    })
+    e.preventDefault()
+    axios
+      .get(`/prepare-auth?url=${router.asPath}`)
+      .then((res) => {
+        if (res.status === 200) {
+          location.href = publicRuntimeConfig.OAUTH_URL
+        } else {
+          console.log("prepare auth failed", res)
+        }
+      })
+      .catch((err) => {
+        console.log("prepare auth failed", err)
+      })
   }, [])
 
   const userDropDown = (
     <Menu>
       <Menu.Item>
-        <a href="javascript:void(0)" onClick={handleLogout}>
+        <div  onClick={handleLogout}>
           登出
-        </a>
+        </div>
       </Menu.Item>
     </Menu>
-  );
+  )
 
   return (
     <Layout>
@@ -72,7 +75,9 @@ function LayoutCon({ children, user, logOut, router }) {
         <Container renderer={<div className="header-inner" />}>
           <div className="header-left">
             <div className="logo">
-              <Icon type="github" style={github_icon_style}></Icon>
+              <Link href="/">
+                <Icon type="github" style={github_icon_style}></Icon>
+              </Link>
             </div>
             <div>
               <Input.Search
@@ -98,7 +103,7 @@ function LayoutCon({ children, user, logOut, router }) {
                     href={`/prepare-auth?url=${router.asPath}`}
                     // onClick={handleGoOAuth}
                   >
-                    <Avatar size={40} icon="user" />
+                    <Avatar size={35} icon="user" />
                   </a>
                 </Tooltip>
               )}
@@ -108,8 +113,6 @@ function LayoutCon({ children, user, logOut, router }) {
       </Header>
       <Content>
         <Container>{children}</Container>
-
-        <div className="btn">lalla</div>
       </Content>
 
       <Footer className="footer">
@@ -121,23 +124,28 @@ function LayoutCon({ children, user, logOut, router }) {
         @import "../static/Layout.css";
       `}</style>
       <style jsx global>{`
-        #__next,
-        .ant-layout {
+        #__next {
           height: 100%;
+        }
+        #__next .ant-layout {
+          min-height: 100%;
+        }
+        #__next .ant-layout-content {
+          background-color: #fff;
         }
       `}</style>
     </Layout>
-  );
+  )
 }
 
 function mapState(state) {
   return {
     user: state.user,
-  };
+  }
 }
 function mapReducer(dispatch) {
   return {
     logOut: () => dispatch(logOut()),
-  };
+  }
 }
-export default connect(mapState, mapReducer)(withRouter(LayoutCon));
+export default connect(mapState, mapReducer)(withRouter(LayoutCon))

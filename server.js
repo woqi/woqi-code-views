@@ -3,10 +3,13 @@ const next = require('next')
 const Router = require('koa-router')
 const session = require('koa-session')
 const Redis = require('ioredis')
+const koaBody = require('koa-body')
 
 
 const RedisSessionStore = require('./server/session-store')
 const auth = require('./server/auth')
+const api = require('./server/api')
+
 
 const dev = process.env.NODE_ENV != 'producction'
 const app = next({ dev })//开发状态
@@ -20,7 +23,8 @@ app.prepare().then(() => {
   const server = new Koa()
   const router = new Router()
   let count = 0
-
+  
+  server.use(koaBody())
   //设置
   server.keys = ['lsdlsd']//加密
   const SESSION_CONFIG = {
@@ -31,6 +35,7 @@ app.prepare().then(() => {
 
   server.use(session(SESSION_CONFIG, server))
   auth(server)//处理github oAuth登陆
+  api(server)
 
   router.get('/a/:id', async (ctx, next) => {
     const id = ctx.params.id
@@ -58,8 +63,6 @@ app.prepare().then(() => {
   })
 
 
-
-
   server.use(router.routes())
 
   server.use(async (ctx, next) => {
@@ -82,11 +85,11 @@ app.prepare().then(() => {
 
 
 
-
-
   server.listen(3030, () => {
     console.log('成功')
   })
 
 })
+
+
 

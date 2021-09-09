@@ -8,14 +8,13 @@ function getRedisSessionId(s_id) {
   }
   //获取redis中存储的session数据
   async get(s_id) {
-    console.log('get session', s_id)
     const id = getRedisSessionId(s_id)
     const data = await this.client.get(id)//redis = this.client 的get方法
     if (!data) {
       return null
     }
     try {
-      console.log('get session-----------------',data)
+      // console.log('get session-----------------',data)
       const result = JSON.parse(data)
       return result
     } catch (err) {

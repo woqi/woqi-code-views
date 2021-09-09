@@ -12,7 +12,6 @@ pages 下的文件才能使用 getInitialProps
 
 ```
 A.getInitialProps = async () => {
-  console.log('object--------------------')
   const promise = new Promise((resolve,reject)=>{
     setTimeout(() => {
       return resolve(256)
@@ -42,7 +41,7 @@ getStaticProps 可以查数据库
 ```
 const A = () => {
   return (
-    <Fragment> 
+    <Fragment>
       页面aaa
       <div className="name">//////4444</div>
       <style jsx>{`
@@ -125,8 +124,6 @@ client_id：让用户知道现在是给哪一个客户端授权
 
 http://localhost:3030/auth?code=bfffa23c01ca2015c3f4
 
-[github api doc](https://docs.github.com/en/rest/reference/users)
-
 access_token=ghu_uDNaNKybHBt4p3iADPgTbwnssHbwCj348W1C&expires_in=28800&refresh_token=ghr_yhsw9sg6LtTO8x4GGBNcLgXv5UI59quSC43DhJ38hzCGbRnitlvsrIkx7eIzSM0ATL4NgO0jOFER&refresh_token_expires_in=15897600&scope=&token_type=bearer
 
 {
@@ -137,12 +134,37 @@ access_token=ghu_uDNaNKybHBt4p3iADPgTbwnssHbwCj348W1C&expires_in=28800&refresh_t
 
 https://github.com/login/oauth/authorize?client_id=Iv1.7bce592037053839&&scope=repo
 
-
 oauth 通过一次性 code、id+secret(在服务器上)、redirect_url 保证安全
 
-cookie储存在客户端，每次发请求都会携带
+cookie 储存在客户端，每次发请求都会携带
 
 | 日期 | 投入   | osk | fs     | tp 显示资产 |
 | ---- | ------ | --- | ------ | ----------- |
 | 8.9  | 300 ￥ | 23$ | 78$    | 45.72$      |
 | 8.12 | 400 ￥ | 25$ | 90.14$ | 107.18$     |
+
+https://api.github.com/users/woqi/repos
+
+/user/starred
+
+| name | 2021.8.22 | 2021.9.1 |
+| ---- | --------- | -------- |
+| wzry | 14.12     | 44.75    |
+| tkb  | 0.49      | 3.18     |
+| hjt  | 7.31      | 29.37    |
+| gs   | 1.42      | 1.54     |
+| hxb  | 187.65    | 729      |
+
+tkb 7 12.46
+
+lru-cache 根据时间缓存
+
+[github api doc 网址](https://docs.github.com/en/rest/reference/users)
+
+https://docs.github.com/en/rest/reference/activity#list-repositories-starred-by-the-authenticated-user
+
+https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps
+
+币安转 bsc 手续费
+0.0005bnb
+0.8usdt

@@ -1,0 +1,210 @@
+.container-lg {
+  max-width: 1012px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.mt-lg-4 {
+  margin-top: 24px !important;
+}
+
+.p-l-r-0 {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+
+}
+
+.pb-3 {
+  padding-bottom: 16px !important;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #d0d7de !important;
+}
+
+.flex-d {
+  display: flex;
+  justify-content: space-between
+}
+
+.select-menu[open]>summary::before {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 80;
+  display: block;
+  cursor: default;
+  content: " ";
+  background: transparent;
+}
+
+.test {
+  justify-self: end;
+  background-color: red;
+}
+
+.select-menu-button {
+  position: relative;
+  display: inline-block;
+  list-style: none;
+  white-space: nowrap;
+  word-wrap: break-word;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid;
+  border-radius: 6px;
+  appearance: none;
+  font-size: 12px;
+  line-height: 20px;
+  padding: 3px 12px;
+  color: #24292f;
+  background-color: #f6f8fa;
+  box-shadow: 0 1px 0 rgba(27, 31, 36, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  border-color: rgba(27, 31, 36, 0.15);
+  transition: color 0.2s cubic-bezier(0.3, 0, 0.5, 1) 0s, background-color, border-color;
+}
+
+.select-menu-button::after {
+  display: inline-block;
+  width: 0px;
+  height: 0px;
+  vertical-align: -2px;
+  content: "";
+  border-top-color: initial;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  border-width: 4px;
+  border-style: solid;
+  border-image: initial;
+}
+
+.select-menu-modal {
+  position: absolute !important;
+  right: 0 !important;
+  z-index: 99;
+  width: 300px;
+  margin-top: 4px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  font-size: 12px;
+  color: #24292f;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(140, 149, 159, 0.2);
+}
+
+.select-menu-header {
+  background: #fff;
+  padding: 8px 10px;
+  line-height: 16px;
+  border-bottom: 1px solid hsla(210, 18%, 87%, 1);
+}
+
+.select-menu-header .select-menu-title {
+  font-weight: 600;
+  color: #24292f;
+}
+
+.select-menu-list {
+  max-height: 400px;
+  overflow: auto;
+}
+
+.select-menu-item {
+  display: flex;
+  text-align: left;
+  background-color: #fff;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  padding: 8px 8px 8px 30px;
+  overflow: hidden;
+  color: inherit;
+  cursor: pointer;
+  border-bottom: 1px solid hsla(210, 18%, 87%, 1);
+  color: #24292f;
+}
+
+/* .select-menu-modal .select-menu-item[aria-checked=true],
+.select-menu-modal .select-menu-item[aria-selected=true], */
+.select-menu-modal .select-menu-item {
+  color: #24292f;
+}
+
+.select-menu-item-text {
+  display: block;
+  text-align: left;
+  margin-left: 1px;
+}
+
+/* octicon octicon-check select-menu-item-icon */
+
+.select-menu-item-icon {
+  color: inherit;
+  visibility: visible;
+  vertical-align: middle;
+  margin-left: -20px;
+}
+
+.border {
+  display: block !important;
+  padding: 16px !important;
+  border-radius: 6px !important;
+  border: 1px solid #d0d7de !important;
+  word-wrap: break-word;
+}
+
+.title {
+  display: inline-block !important;
+  font-size: 14px !important;
+  margin-bottom: 8px !important;
+  font-weight: 600;
+  margin-top: 0;
+}
+
+.filter-list {
+  list-style-type: none;
+}
+
+.root .filter-item {
+  list-style-type: none;
+  border: none;
+  white-space: nowrap;
+  cursor: pointer;
+  padding: 6px 12px;
+  font-size: 12px;
+  position: relative;
+  display: flex;
+  padding: 8px 16px;
+  margin-bottom: 4px;
+  overflow: hidden;
+  font-size: 14px;
+  color: #57606a;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: 6px;
+  justify-content: space-between;
+}
+
+.filter-item-icon {
+  align-self: flex-end;
+  justify-self: flex-end;
+}
+
+.filter-item-selected {
+  color: #fff;
+  background-color: #0969da;
+}
+
+.filter-item .count {
+  font-weight: 600;
+  font-size: 12px;
+}

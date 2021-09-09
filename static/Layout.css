@@ -1,25 +1,13 @@
-.btn {
-  color: red;
-}
-
-.header-inner,
-.header-left {
-  display: flex;
-}
 
 .header-inner {
+  display: flex;
   justify-content: space-between;
-
 }
 
 .header-left {
+  display: flex;
   justify-content: flex-start;
 
-}
-
-
-.github-icon {
-  color: white;
 }
 
 .footer {
