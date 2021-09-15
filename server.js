@@ -86,7 +86,7 @@ app.prepare().then(() => {
 
 
   server.listen(3030, () => {
-    console.log('成功')
+    console.log('Listen on: http://localhost:3030')
   })
 
 })
