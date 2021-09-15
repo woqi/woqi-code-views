@@ -1,5 +1,4 @@
-.container-lg {
-  max-width: 1012px;
+.m-r-l-auto {
   margin-right: auto;
   margin-left: auto;
 }
@@ -8,20 +7,26 @@
   margin-top: 24px !important;
 }
 
+.mb-lg-4 {
+  margin-bottom: 24px !important;
+}
 .p-l-r-0 {
   padding-left: 0 !important;
   padding-right: 0 !important;
-
 }
 
 .pb-3 {
   padding-bottom: 16px !important;
 }
-
+.w-sm{
+  min-width: 166px;
+}
 .border-bottom {
   border-bottom: 1px solid #d0d7de !important;
 }
-
+.hide{
+  display: none;
+}
 .flex-d {
   display: flex;
   justify-content: space-between
@@ -153,11 +158,18 @@
 }
 
 .border {
-  display: block !important;
-  padding: 16px !important;
-  border-radius: 6px !important;
-  border: 1px solid #d0d7de !important;
+  /* position: relative;
+  top:0;
+  left:0;
+  bottom: 0;
+  right: 0; */
+  display: block ;
+  padding: 16px ;
+  border-radius: 6px;
+  border: 1px solid #d0d7de;
   word-wrap: break-word;
+  min-width: 166px;
+  max-width: 231px;
 }
 
 .title {
@@ -173,15 +185,13 @@
 }
 
 .root .filter-item {
+  display: flex;
   list-style-type: none;
   border: none;
   white-space: nowrap;
   cursor: pointer;
   padding: 6px 12px;
   font-size: 12px;
-  position: relative;
-  display: flex;
-  padding: 8px 16px;
   margin-bottom: 4px;
   overflow: hidden;
   font-size: 14px;

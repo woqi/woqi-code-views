@@ -1,233 +1,207 @@
-/**
- * sort:排序方式
- * lang:语言
- * order:排序顺序
- * page:分页页面
- **/
-import { useState, useCallback } from "react";
-import { withRouter } from "next/router"
-import { Row, Col, List, Pagination } from "antd";
-import Link from "next/link";
-import Router from "next/router";
+import { memo, isValidElement, useEffect } from 'react'
+import { withRouter } from 'next/router'
+import { Row, Col, List, Pagination } from 'antd'
+import Link from 'next/link'
 
+import Repo from '../components/Repo'
+import { cacheArray } from '../lib/repo-basic-cache'
+
+// const api = require('../lib/api')
 const map_api = require('../lib/map-api')//映射api
-const LANGUAGES = ['JavaScript', 'TypeScript', 'HTML', 'CSS', 'Java', 'Objective-C', 'Python', 'Ruby', 'PHP']
+
+
+const LANGUAGES = ['JavaScript', 'HTML', 'CSS', 'TypeScript', 'Java', 'Rust']
 const SORT_TYPES = [
   {
-    name: 'Best match'
+    name: 'Best Match',
   },
   {
-    name: 'Most stars',
+    name: 'Most Stars',
     value: 'stars',
-    order: 'desc'
+    order: 'desc',
   },
   {
-    name: 'Fewest stars',
+    name: 'Fewest Stars',
     value: 'stars',
-    order: 'asc'
+    order: 'asc',
   },
   {
-    name: 'Most forks',
+    name: 'Most Forks',
     value: 'forks',
-    order: 'desc'
+    order: 'desc',
   },
   {
-    name: 'Fewest forks',
+    name: 'Fewest Forks',
     value: 'forks',
-    order: 'asc'
+    order: 'asc',
   },
-  // {
-  //   name: 'Recently updated',
-  //   value: 'stars',
-  //   order: 'desc'
-  // },
-  // {
-  //   name: 'Least recently updated',
-  //   value: 'stars',
-  //   order: 'desc'
-  // },
 ]
 
+/**
+ * sort: 排序方式
+ * order: 排序顺序
+ * lang: 仓库的项目开发主语言
+ * page：分页页面
+ */
+
+const selectedItemStyle = {
+  borderLeft: '2px solid #e36209',
+  fontWeight: 100,
+}
+
+function noop() {
+  console.log('noop')
+}
+
+const per_page = 20
+
+const isServer = typeof window === 'undefined'
+const FilterLink = memo(({ name, query, lang, sort, order, page }) => {
+  let queryString = `?query=${query}`
+  if (lang) queryString += `&lang=${lang}`
+  if (sort) queryString += `&sort=${sort}&order=${order || 'desc'}`
+  if (page) queryString += `&page=${page}`
+
+  queryString += `&per_page=${per_page}`
+
+  return (
+    <Link href={`/search${queryString}`}>
+      {isValidElement(name) ? name : <a>{name}</a>}
+    </Link>
+  )
+})
+
 function Search({ router, repos }) {
-  console.log('repos---', repos)
-  console.log('router---', router)
-  // const [open, setOpen] = useState(initialState)
-  const { sort, order, lang, query } = router.query
+  const { ...querys } = router.query
+  const { lang, sort, order, page } = router.query
 
-  const doSearch = useCallback((config) => {
-    Router.push({
-      pathname: '/search',
-      query: config
-    })
-  },[])
-  const onDetailsToggle = event => {
-    console.log('onDetailsToggle---', event.target.open)
-  }
+  useEffect(() => {
+    if (!isServer) cacheArray(repos.items)
+  })
 
-  return (<div className="root">
+  return (
+    <div className="root">
+      <Row gutter={20}>
+        <Col span={6}>
+          <List
+            bordered
+            header={<span className="list-header">语言</span>}
+            style={{ marginBottom: 20 }}
+            dataSource={LANGUAGES}
+            renderItem={item => {
+              const selected = lang === item
 
-    <Row gutter={20} type="flex" justify="center" className="mt-lg-4">
-
-      <Col span={4}>
-
-
-        <div className="border">
-          <h2 className="title"> 
-            语言
-          </h2>
-          <ul className="filter-list" >
-            {LANGUAGES.map(lan => {
-              const selected = lang === lan
               return (
-                <li key={lan}>
-                  <a className={`filter-item ${selected ? 'filter-item-selected' : ''}`}
-                    onClick={() => doSearch({
-                      sort,
-                      order, query, lang: lan
-                    })}
-                  >
-                    {lan}
-                    {selected ? (
-                      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true"
-                        className="filter-item-icon">
-                        <path fill-rule="evenodd" d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"></path>
-                      </svg>
-                    ) : null}
-
-                    {/* <span className="count">2,724,122</span> */}
-                  </a>
-                </li>
+                <List.Item style={selected ? selectedItemStyle : null}>
+                  {selected ? (
+                    <span>{item}</span>
+                  ) : (
+                    <FilterLink {...querys} lang={item} name={item} />
+                  )}
+                </List.Item>
               )
-            }
-
-            )}
-
-          </ul>
-
-        </div>
-
-        <List
-          bordered
-          className="filter-list"
-          header={<span className="list-header">语言</span>}
-          style={{ marginBottom: 16 }}
-          dataSource={LANGUAGES}
-          renderItem={item => {
-            const selected = lang === item
-            console.log('selected=---=-=-', selected)
-            return (
-              <List.Item>
-                {/* <Link href={`/search${queryString}`}> */}
-
-                <a
-                  className={`filter-item  ${selected ? 'filter-item-selected' : ''}`}
-                  onClick={() => handleLanguageChange(item)}
-                >
-                  {item}
-                </a>
-
-                {/* </Link> */}
-              </List.Item>
-            )
-          }}
-        />
-
-      </Col>
-
-      <Col span={13} className="p-l-r-0">
-        <div className="flex-d pb-3 border-bottom">
-          <h3>{repos.total_count}个结果</h3>
-          <details className="select-menu" onToggle={event => onDetailsToggle(event)}>
-            <summary className="select-menu-button" aria-haspopup="menu">
-
-              <i>Sort:</i>
-              <span data-menu-button="">Best match</span>
-            </summary>
-
-            <div className="select-menu-modal" aria-label="Sort options" >
-
-              <div className="select-menu-header" >
-   
-                <span className="select-menu-title">Sort options</span>
-              </div>
-
-              <div className="select-menu-list" >
-                {SORT_TYPES.map(item => {
-
-                  let selected = false
-                  if (item.name === 'Best match' && !sort) {
-                    selected = true
-                  } else if (item.value === sort && item.order === order) {
-                    selected = true
-                  }
-                  return (
-                    <a className="select-menu-item"
-                      aria-checked="true"
-                      key={item.name}
-                      onClick={() => {
-                        doSearch({
-                          lang,
-                          query,
-                          sort: item.value || '',
-                          order: item.order || '',
-                        })
-                        document.querySelector(".select-menu").open = false;
-
-                      }}>
-                      {
-                        selected ? (
-                          <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" className="select-menu-item-icon">
-                            <path fillRule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path>
-                          </svg>
-                        ) : null
-                      }
-                      {/* aria-checked="true" */}
-
-                      <span className="select-menu-item-text" data-menu-button-text="">{item.name}</span>
-                    </a>
-
-                  )
-                }
-
-                )}
-
-              </div>
-
-            </div>
-
-          </details>
-
-        </div>
-      </Col>
-
-
-    </Row>
-
-    <style jsx>{`@import "../static/search.css";`}</style>
-  </div>
+            }}
+          />
+          <List
+            bordered
+            header={<span className="list-header">排序</span>}
+            dataSource={SORT_TYPES}
+            renderItem={item => {
+              let selected = false
+              if (item.name === 'Best Match' && !sort) {
+                selected = true
+              } else if (item.value === sort && item.order === order) {
+                selected = true
+              }
+              return (
+                <List.Item style={selected ? selectedItemStyle : null}>
+                  {selected ? (
+                    <span>{item.name}</span>
+                  ) : (
+                    <FilterLink
+                      {...querys}
+                      sort={item.value}
+                      order={item.order}
+                      name={item.name}
+                    />
+                  )}
+                </List.Item>
+              )
+            }}
+          />
+        </Col>
+        <Col span={18}>
+          <h3 className="repos-title">{repos.total_count} 个仓库</h3>
+          {repos.items.map(repo => (
+            <Repo repo={repo} key={repo.id} />
+          ))}
+          <div className="pagination">
+            <Pagination
+              pageSize={per_page}
+              current={Number(page) || 1}
+              total={1000}
+              onChange={noop}
+              itemRender={(page, type, ol) => {
+                const p =
+                  type === 'page' ? page : type === 'prev' ? page - 1 : page + 1
+                const name = type === 'page' ? page : ol
+                return <FilterLink {...querys} page={p} name={name} />
+              }}
+            />
+          </div>
+        </Col>
+      </Row>
+      <style jsx>{`
+        .root {
+          padding: 20px 0;
+        } 
+        .list-header {
+          font-weight: 800;
+          font-size: 16px;
+        }
+        .repos-title {
+          border-bottom: 1px solid #eee;
+          font-size: 24px;
+          line-height: 50px;
+        }
+        .pagination {
+          padding: 20px;
+          text-align: center;
+        }
+      `}</style>
+    </div>
   )
 }
+
 Search.getInitialProps = async ({ ctx }) => {
-  console.log('ctx---', ctx)
   const { query, sort, lang, order, page } = ctx.query
+
   if (!query) {
     return {
-      repos: { total_count: 0 }
+      repos: {
+        total_count: 0,
+      },
     }
   }
+
   let queryString = `?q=${query}`
   if (lang) queryString += `+language:${lang}`
-  if (sort) queryString += `+&sort:${sort}&order=${order || 'desc'}`
-  if (page) queryString += `&page:${page}`
+  if (sort) queryString += `&sort=${sort}&order=${order || 'desc'}`
+  if (page) queryString += `&page=${page}`
 
-  const res = await map_api.request({ url: `/search/repositories${queryString}` },
+  queryString += `&per_page=${per_page}`
+
+  const result = await map_api.request(
+    {
+      url: `/search/repositories${queryString}`,
+    },
     ctx.req,
-    ctx.res
+    ctx.res,
   )
 
   return {
-    repos: res.data
+    repos: result.data,
   }
-
 }
+
 export default withRouter(Search)
