@@ -168,3 +168,11 @@ https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth
 币安转 bsc 手续费
 0.0005bnb
 0.8usdt
+
+
+## hoc组件要点 将自己要使用的参数留下，剩余参数放入组件
+
+
+@import 'github-markdown-css/github-markdown.css当前版本已经被修改为npm install --global generate-github-markdown-css
+
+`const MDRender = dynamic(() => import('../../components/MarkdownRender'))` 打包出来的文件其实大小没有变 把Markdown-it变成了一个请求，但是实际意义是异步加载该组件，Markdown-it包得以长缓存，detail文件改变不会导致Markdown-it包的url

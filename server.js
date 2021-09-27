@@ -4,6 +4,7 @@ const Router = require('koa-router')
 const session = require('koa-session')
 const Redis = require('ioredis')
 const koaBody = require('koa-body')
+const atob = require('atob')
 
 
 const RedisSessionStore = require('./server/session-store')
@@ -12,18 +13,20 @@ const api = require('./server/api')
 
 
 const dev = process.env.NODE_ENV != 'producction'
-const app = next({ dev })//开发状态
+const app = next({ dev })//开发状态 
 const handle = app.getRequestHandler()
 const redis = new Redis({//创建redis client
   port: '6380',
   password: '123'
 })
+//设置node全局atob，node无该方法，浏览器有
+global.atob = require('atob')
 
 app.prepare().then(() => {
   const server = new Koa()
   const router = new Router()
   let count = 0
-  
+
   server.use(koaBody())
   //设置
   server.keys = ['lsdlsd']//加密

@@ -11,7 +11,7 @@ const map_api = require('../lib/map-api')//映射api
 
 
 const LANGUAGES = ['JavaScript', 'HTML', 'CSS', 'TypeScript', 'Java', 'Rust']
-const SORT_TYPES = [
+const SORT_TYPES = [ 
   {
     name: 'Best Match',
   },
@@ -56,12 +56,12 @@ function noop() {
 const per_page = 20
 
 const isServer = typeof window === 'undefined'
+
 const FilterLink = memo(({ name, query, lang, sort, order, page }) => {
   let queryString = `?query=${query}`
   if (lang) queryString += `&lang=${lang}`
   if (sort) queryString += `&sort=${sort}&order=${order || 'desc'}`
   if (page) queryString += `&page=${page}`
-
   queryString += `&per_page=${per_page}`
 
   return (

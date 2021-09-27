@@ -21,7 +21,7 @@ module.exports = (server) => {
           client_id, client_secret, code
         },
         headers: {
-          Accept: 'application/json'
+          Accept: 'application/vnd.github.v3+json'
         }
       })
       console.log('githubAuth-----', res.data)
@@ -39,15 +39,16 @@ module.exports = (server) => {
         ctx.session.githubAuth = res.data
 
         const { access_token, token_type } = res.data
+        // const { access_token, token_type } = result.data
 
         const userInfoResP = await axios({
           method: 'GET',
           url: 'https://api.github.com/user',
           headers: {
-            'Authorization': `${token_type} ${access_token}`
+            Authorization: `${token_type} ${access_token}`
           }
         })
-        console.log('userInfoResP-----------', userInfoResP.data)
+        // console.log('userInfoResP-----------', userInfoResP.data)
         ctx.session.userInfo = userInfoResP.data
 
         ctx.redirect((ctx.session && ctx.session.urlBeforeOAuth) || '/')

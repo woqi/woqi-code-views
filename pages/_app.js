@@ -6,7 +6,7 @@ import Link from "next/link"
 import withRedux from '../lib/with-redux'
 import Layout from "../components/Layout"
 import PageLoading from "../components/PageLoading"
-import axios from 'axios'
+// import axios from 'axios'
 class MyApp extends App {
   state = { loading: false }
 
@@ -43,12 +43,13 @@ class MyApp extends App {
 
   render() {
     const { Component, pageProps, reduxStore } = this.props
+    // console.log('~~~~',this.state)
     return (
       <Container>
 
         <Provider store={reduxStore}>
-          {this.state.loading ? <PageLoading /> : null}
           <Layout>
+          {/* {this.state.loading ? <PageLoading /> : null} */}
 
             {pageProps ? <Component {...pageProps} /> : <Component />}
             {/* <Component {...pageProps} /> */}

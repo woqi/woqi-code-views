@@ -19,7 +19,7 @@ function Index({ user, userRepos, userStarred, router }) {
   const tabKey = router.query.key || '1'
 
   const handleTabChange = activeKey => {
-    console.log('sb···',activeKey)
+    console.log('sb···', activeKey)
     Router.push(`/?key=${activeKey}`)
   }
 
@@ -48,7 +48,9 @@ function Index({ user, userRepos, userStarred, router }) {
     return (
       <div className="root">
         <p>亲，您还没有登录哦~</p>
-        <Button type="primary" href={publicRuntimeConfig.OAUTH_URL}>点击登录</Button>
+        {/* {`/prepare-auth?url=${router.asPath}`} */}
+        {/* {publicRuntimeConfig.OAUTH_URL} */}
+        <Button type="primary" href={`/prepare-auth?url=${router.asPath}`}>点击登录</Button>
         <style jsx>{`@import "../static/index.css";`}</style>
       </div>
     )
@@ -70,13 +72,13 @@ function Index({ user, userRepos, userStarred, router }) {
 
       <div className="user-repos">
 
-        <Tabs  activeKey={tabKey}
+        <Tabs activeKey={tabKey}
           onChange={handleTabChange} animated={false}>
-            {/* defaultActiveKey="1" */}
+          {/* defaultActiveKey="1" */}
           <Tabs.TabPane tab="你的仓库" key="1">
             {/* .filter(e=>e.owner.login === ) */}
             {userRepos.map(repo => (
-              <Repo key={repo.id} repo={repo} />
+              <Repo key={repo.id} repo={repo} user={user} />
             ))}
           </Tabs.TabPane>
           <Tabs.TabPane tab="你关注的仓库" key="2">
@@ -95,10 +97,10 @@ function Index({ user, userRepos, userStarred, router }) {
 }
 
 Index.getInitialProps = async ({ ctx, reduxStore }) => {
-// console.log('ctx---',ctx)
+  // console.log('ctx---',ctx)
   const user = reduxStore.getState().user
   if (!user || !user.id) {
-    return 
+    return
   }
 
   if (!isServer) {
@@ -107,7 +109,7 @@ Index.getInitialProps = async ({ ctx, reduxStore }) => {
         userRepos: cachedUserRepos,
         userStarred: cachedUserStarred
       }
-    } 
+    }
   }
 
   const rposRes = await map_api.request({
