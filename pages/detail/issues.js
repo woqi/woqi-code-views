@@ -1,15 +1,22 @@
+import { useState, useCallback } from 'react'
+
 import withRepoBasic from "../../components/with-repo-basic";
 const map_api = require('../../lib/map-api')
 
 
 import IssueItem from "../../components/IssueItem";
-import IssueDetail from "../../components/IssueDetail";
+import SearchUser from "../../components/SearchUser";
 
 function Issues({ issues }) {
+  const [creator, setCreator] = useState()
+
+  const handleCreatorChange = useCallback(value => {
+    setCreator(value)
+  }, [])
 
   return (
     <div className="root">
-
+      <SearchUser />
       <div className="issues">
 
         {issues.map(issue => (
