@@ -1,14 +1,15 @@
 import { Avatar, Button } from 'antd'
 import { useState, useCallback, Fragment } from 'react'
-import { getLastUpdated } from '../lib/utils'
 
+import { getLastUpdated } from '../lib/utils'
 import IssueDetail from './IssueDetail'
+import Label from './Label'
 
 export default function IssueItem({ issue }) {
   const [showDetail, setShowDetail] = useState(false)
   const toggleShowDetail = useCallback(() => {
     //逃避闭包
-    setShowDetail((d) => !d)
+    setShowDetail(d => !d)
   }, [])
   return (
     <Fragment>
@@ -20,6 +21,7 @@ export default function IssueItem({ issue }) {
         <div className='main-info'>
           <h6>
             <span>{issue.title}</span>
+            {issue.labels.map(la => (<Label label={la} key={la.id} />))}
             <p className='sub-info'>
               <span>Updated at {getLastUpdated(issue.updated_at)}</span>
             </p>

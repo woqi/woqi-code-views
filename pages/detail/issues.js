@@ -1,4 +1,4 @@
-import { useState, useCallback,useEffect } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Select, Button, Spin } from 'antd'
 
 const map_api = require('../../lib/map-api')
@@ -101,7 +101,12 @@ function Issues({ issues, labels, owner, name }) {
             )
           })}
         </Select>
-        <Button type='primary'className="search-btn" disabled={fetching} onClick={h_Search}>
+        <Button
+          type='primary'
+          style={{ marginLeft: 20 }}
+          disabled={fetching}
+          onClick={h_Search}
+        >
           搜索
         </Button>
       </div>
@@ -119,17 +124,14 @@ function Issues({ issues, labels, owner, name }) {
       )}
 
       <style jsx>{`
-        .search-btn{
-          margin-left: 20px !important;
+        .search {
+          display: flex;
         }
         .issues {
           border: 1px solid #eee;
           border-radius: 5px;
           margin-bottom: 20px;
           margin-top: 20px;
-        }
-        .search {
-          display: flex;
         }
         .loading {
           height: 400px;
@@ -143,6 +145,7 @@ function Issues({ issues, labels, owner, name }) {
 }
 Issues.getInitialProps = async ({ ctx }) => {
   const { owner, name } = ctx.query
+  const full_name = `${owner}/${name}`
 
   const res = await Promise.all([
     await map_api.request(
@@ -152,13 +155,15 @@ Issues.getInitialProps = async ({ ctx }) => {
       ctx.req,
       ctx.res
     ),
-    await map_api.request(
-      {
-        url: `/repos/${owner}/${name}/labels`,
-      },
-      ctx.req,
-      ctx.res
-    ),
+    CACHE[full_name]
+      ? Promise.resolve({ data: CACHE[full_name] })
+      : await api.request(
+          {
+            url: `/repos/${owner}/${name}/labels`,
+          },
+          ctx.req,
+          ctx.res
+        ),
   ])
 
   return {
