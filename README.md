@@ -176,3 +176,9 @@ https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth
 @import 'github-markdown-css/github-markdown.css当前版本已经被修改为npm install --global generate-github-markdown-css
 
 `const MDRender = dynamic(() => import('../../components/MarkdownRender'))` 打包出来的文件其实大小没有变 把Markdown-it变成了一个请求，但是实际意义是异步加载该组件，Markdown-it包得以长缓存，detail文件改变不会导致Markdown-it包的url
+
+
+next静态页面导出
+开发博客、静态展示网站。不需要经常更新，固定内容生成静态html，不需要启动nodejs服务端渲染，相当于把服务端渲染所有可能的结果列出来，输出一个个不同的html文件，放入Nginx http server 或者github pages，服务器根据路径输出不同html文件，获取了类似服务端渲染的结果
+注意事项：
+在代码中 服务端渲染中可以用的内容可能静态导出时会报错
